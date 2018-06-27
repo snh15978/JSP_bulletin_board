@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"  "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Report">
+	<typeAlias alias="map" type="java.util.Map" />
+	<typeAlias alias="str" type="java.lang.String" />
+	<typeAlias alias="int" type="java.lang.Integer" />
+	<typeAlias alias="report" type="com.report.beans.Bugreport" />
+	
+	<select id="getReportList" resultClass="report">
+		select * from bugreport order by num desc
+	</select>
+
+	<select id="getUnreadList" resultClass="report">
+		select * from bugreport WHERE count=0 ORDER by num desc
+	</select>
+	
+	<select id="getImportantList" resultClass="report">
+		select * from bugreport WHERE important>=1 ORDER by num desc
+	</select>
+		
+	<select id="getSearchList" parameterClass="string" resultClass="report">
+		select * from bugreport where inputStr LIKE "%$keyword$%" ORDER by num desc
+	</select>
+
+	<select id="getErrorList" parameterClass="string" resultClass="report">
+		select * from bugreport where errorWord LIKE "%$keyword$%" ORDER by num desc
+	</select>
+
+	<select id="getReplaceList" parameterClass="string" resultClass="report">
+		select * from bugreport where replaceWord LIKE "%$keyword$%" ORDER by num desc
+	</select>
+		
+ 	<select id="getReport" parameterClass="int" resultClass="report">
+		select * from bugreport where num = #value#
+	</select>
+
+	<select id="getUnreadCnt" parameterClass="report" resultClass="int">
+		select count(*) from bugreport where count=0
+	</select>
+	<delete id="deleteReport" parameterClass="int">
+		delete from bugreport where num = #value#
+	</delete>	 
+	
+	<update id="setReportCount" parameterClass="report">
+		update bugreport set count = #count# where num = #num#
+	</update>
+	
+	<update id="setImportantCheck" parameterClass="report">
+		update bugreport set important = #count# where num = #num#
+	</update>	
+</sqlMap>
